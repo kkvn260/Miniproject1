@@ -8,14 +8,14 @@ public class MemberMain {
 		// TODO Auto-generated method stub
 		Scanner sc=new Scanner(System.in);
 		MemberDAO dao=new MemberDAO();
-
-
+//		dao.start();
+		
 		while (true) {
 			System.out.println("===메뉴===");
-			System.out.println("1.입력");
-			System.out.println("2.수정");
-			System.out.println("3.삭제");
-			System.out.println("4.조회");
+			System.out.println("1.회원가입");
+			System.out.println("2.회원수정");
+			System.out.println("3.회원삭제");
+			System.out.println("4.회원조회");
 			System.out.println("5.전체보기");
 			System.out.print("선택 : ");
 			String su=sc.nextLine();
@@ -50,7 +50,7 @@ public class MemberMain {
 				}
 				break; 
 			case "2":
-//				dao.modi();
+				dao.modi();
 				break;
 			case "3":
 

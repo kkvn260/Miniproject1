@@ -47,8 +47,8 @@ public class MemberDAO {
 		PreparedStatement pstmt=null;
 
 		StringBuilder sql=new StringBuilder();
-		sql.append(" insert into account(id,name,email,pwd,no) ");
-		sql.append("  values(?,?,?,?,proseq.nextval)   "  	);
+		sql.append(" insert into account(id,name,email,pwd,no,cdate) ");
+		sql.append("  values(?,?,?,?,proseq.nextval,sysdate)   "  	);
 
 
 		int result=0;
@@ -75,21 +75,13 @@ public class MemberDAO {
 
 	public void getAll()
 	{
-		while(true) {
-			System.out.println("ID\t 이름\t 이메일\t");
-			Iterator<String> ita=hm.keySet().iterator();
-			while(ita.hasNext()) {
-				String id=ita.next();
-				MemberDTO value=hm.get(id);
-				System.out.println(id+"\t"+value);
-			}
-			System.out.println("계속 조회할까요?");
-			String yn=sc.nextLine();
-			if(yn.contentEquals("n"))
-				break;
+		System.out.println("ID\t 이름\t 이메일\t");
+		Iterator<String> ita=hm.keySet().iterator();
+		while(ita.hasNext()) {
+			String id=ita.next();
+			MemberDTO value=hm.get(id);
+			System.out.println(id+"\t"+value);
 		}
-
-
 	}
 
 	public void search() {
@@ -110,7 +102,7 @@ public class MemberDAO {
 					break;
 			}
 			else
-				System.out.println("조회할 ID가 없습니다.");
+				System.out.println("입력한 ID가 없습니다.");
 		}
 	}
 
@@ -133,12 +125,42 @@ public class MemberDAO {
 	 * 
 	 * }
 	 */
-//	public void modi() {
-//		Connection conn=getConnection();
-//		PreparedStatement pstmt=null;
-//		StringBuffer sb=new StringBuffer();
-//		sb.append("  alter table account  ");
-//		sb.append("  modify )
-//		
+	public void modi() {
+		Connection conn=getConnection();
+		PreparedStatement pstmt=null;
+		StringBuffer sb=new StringBuffer();
+		System.out.println("수정할 ID를 입력해주세요.");
+		String id=sc.nextLine();
+		MemberDTO ck=check(id);
+		if(ck!=null) {
+			System.out.println("수정할 비밀번호를 입력해주세요.");
+			String pwd=sc.nextLine();
+			sb.append("  update account  ");
+			sb.append("  set pwd =? "   );
+			sb.append("  where id=? "  );
+			int result=0;
+			try {
+				pstmt=conn.prepareStatement(sb.toString());
+				pstmt.setString(1, pwd);
+				pstmt.setString(2, id);
+				result=pstmt.executeUpdate();
+				
+				
+			}catch(SQLException e) {
+				System.out.println(e);
+			}finally {
+				close(pstmt,conn);
+			}
+			if(result >=1)
+			System.out.println("수정완료");
+		}
+		else
+			System.out.println("입력한 ID가 없습니다.");
+
+	}
+
+//	public void start() {
+//		return 
 //	}
 }
+
