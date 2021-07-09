@@ -4,10 +4,14 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.HashMap;
 
 public class MemberDAO {
-	//db 기능 메서드
-	private Connection getConnection(){
+	
+	public HashMap<String, MemberDTO> hm=new HashMap<>();
+	
+	
+	private Connection getConnection(){ //db 기능 메서드
 		String className = "oracle.jdbc.OracleDriver";
 		String url = "jdbc:oracle:thin:@localhost:1521:XE";
 		String user = "hr";
@@ -47,7 +51,7 @@ public class MemberDAO {
 			pstmt.setString(3, em);
 			pstmt.setString(4, p);
 			result = pstmt.executeUpdate();
-
+			
 		}catch(SQLException e) {
 			System.out.println(e);
 		}finally {
