@@ -50,7 +50,7 @@ public class MemberMain {
 				}
 				break; 
 			case "2":
-				dao.modi();
+//				dao.modi();
 				break;
 			case "3":
 
@@ -62,10 +62,6 @@ public class MemberMain {
 				dao.getAll();
 				break;
 			default:
-				dao.dseq();
-				dao.cseq();
-				int ex=dao.exit();
-				if(ex >=1) {
 				System.out.println("종료합니다.");
 				System.exit(0);
 				}
@@ -75,4 +71,4 @@ public class MemberMain {
 		}
 
 	}
-}
+

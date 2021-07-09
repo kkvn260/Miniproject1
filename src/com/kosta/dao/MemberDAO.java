@@ -114,66 +114,31 @@ public class MemberDAO {
 		}
 	}
 
-	public int exit() {
-		Connection conn=getConnection();
-		
-		PreparedStatement pstmt2=null;
-		StringBuilder sql2=new StringBuilder();
-		StringBuilder sql3=new StringBuilder();
-		StringBuilder sql4=new StringBuilder();
-		
-		sql2.append("  delete account  ");
-		sql3.append("  drop sequence proseq  ");
-		sql4.append("  create sequence proseq  ");
-	    int result2=0;
-		try {
-			pstmt2=conn.prepareStatement(sql3.toString());
-			pstmt2=conn.prepareStatement(sql4.toString());
-			pstmt2=conn.prepareStatement(sql2.toString());
-			result2=pstmt2.executeUpdate();
 
-		}catch(SQLException e) {
-			System.out.println(e);
-		}finally {
-			close(pstmt2,conn);
-		}
-		return result2;
-	}
-
-	public void cseq() {
-		Connection conn=getConnection();
-		PreparedStatement pstmt=null;
-		StringBuilder sql4=new StringBuilder();
-		sql4.append("  create sequence proseq  ");
-		try {
-			pstmt=conn.prepareStatement(sql4.toString());
-			pstmt.executeUpdate();
-		}catch(SQLException e) {
-			System.out.println(e);
-		}finally {
-			close(pstmt,conn);
-		}
-	}
-
-	public void dseq() {
-		Connection conn=getConnection();
-		PreparedStatement pstmt=null;
-		StringBuilder sql3=new StringBuilder();
-		sql3.append("  drop sequence proseq  ");
-		
-		try {
-			pstmt=conn.prepareStatement(sql3.toString());
-			pstmt.executeUpdate();
-		}catch(SQLException e) {
-			System.out.println(e);
-		}finally {
-			close(pstmt,conn);
-		} 
-		
-	}
-
-	public void modi() {
-		// TODO Auto-generated method stub
-		
-	}
+	/*
+	 * public void cseq() { Connection conn=getConnection(); PreparedStatement
+	 * pstmt=null; StringBuilder sql4=new StringBuilder();
+	 * sql4.append("  create sequence proseq  "); try {
+	 * pstmt=conn.prepareStatement(sql4.toString()); pstmt.executeUpdate();
+	 * }catch(SQLException e) { System.out.println(e); }finally { close(pstmt,conn);
+	 * } }
+	 * 
+	 * public void dseq() { Connection conn=getConnection(); PreparedStatement
+	 * pstmt=null; StringBuilder sql3=new StringBuilder();
+	 * sql3.append("  drop sequence proseq  ");
+	 * 
+	 * try { pstmt=conn.prepareStatement(sql3.toString()); pstmt.executeUpdate();
+	 * }catch(SQLException e) { System.out.println(e); }finally { close(pstmt,conn);
+	 * }
+	 * 
+	 * }
+	 */
+//	public void modi() {
+//		Connection conn=getConnection();
+//		PreparedStatement pstmt=null;
+//		StringBuffer sb=new StringBuffer();
+//		sb.append("  alter table account  ");
+//		sb.append("  modify )
+//		
+//	}
 }
