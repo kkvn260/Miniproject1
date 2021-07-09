@@ -27,7 +27,7 @@ public class MemberDAO {
 	//insert 기능 메서드
 	//update 기능 메서드
 	//delete 기능 메서드
-	//select 기능 메서드
+	//select 기능 메서드 
 	//close 기능 메서드
 
 	public int insert(String i, String p, String n,String em) {

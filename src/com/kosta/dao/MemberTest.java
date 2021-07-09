@@ -33,7 +33,7 @@ public class MemberTest {
 		if(result >=1)
 			System.out.println("추가완료");
 		else
-			System.out.println("추가실패");
+			System.out.println("추가실패");  
 
 	}
 
