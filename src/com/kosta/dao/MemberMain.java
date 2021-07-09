@@ -53,7 +53,7 @@ public class MemberMain {
 				dao.modi();
 				break;
 			case "3":
-
+				dao.delete();
 				break;
 			case "4":
 				dao.search();

@@ -144,23 +144,56 @@ public class MemberDAO {
 				pstmt.setString(1, pwd);
 				pstmt.setString(2, id);
 				result=pstmt.executeUpdate();
-				
-				
+
+
 			}catch(SQLException e) {
 				System.out.println(e);
 			}finally {
 				close(pstmt,conn);
 			}
 			if(result >=1)
-			System.out.println("수정완료");
+				System.out.println("수정완료");
 		}
 		else
 			System.out.println("입력한 ID가 없습니다.");
 
 	}
 
-//	public void start() {
-//		return 
-//	}
+	public void delete() {
+		Connection conn=getConnection();
+		PreparedStatement pstmt=null;
+		StringBuffer sb=new StringBuffer();
+		System.out.println("삭제할 ID를 입력해주세요.");
+		String id=sc.nextLine();
+		MemberDTO ck=check(id);
+		if(ck!=null) {
+			System.out.println("정말 삭제 하시겠습니까? y/n");
+			String yn=sc.nextLine();
+			if(yn.contentEquals("y")) {
+				sb.append("  delete from account  ");
+				sb.append("  where id=? "  );
+				int result=0;
+				try {
+					pstmt=conn.prepareStatement(sb.toString());
+					pstmt.setString(1, id);
+					result=pstmt.executeUpdate();
+				}catch(SQLException e) {
+					System.out.println(e);
+				}finally {
+					close(pstmt,conn);
+				}
+				if(result >=1)
+					System.out.println("삭제 완료");
+				else
+					System.out.println("삭제 실패");
+			}
+		}
+		else
+			System.out.println("입력한 ID가 없습니다.");
+	}
+
+	//	public void start() {
+	//		return 
+	//	}
 }
 
