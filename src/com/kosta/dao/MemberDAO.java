@@ -5,6 +5,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.Iterator;
 
 public class MemberDAO {
 	
@@ -28,12 +29,18 @@ public class MemberDAO {
 		return conn;
 	}
 
-	//insert 기능 메서드
+	//insert 기능 메서드 o
 	//update 기능 메서드
 	//delete 기능 메서드
 	//select 기능 메서드 
-	//close 기능 메서드
-
+	//close 기능 메서드 o
+	private MemberDTO check(String i){
+		MemberDTO result=null;
+		if(hm.containsKey(i)) {
+		result=hm.get(i);
+		}
+		return result;
+	}
 	public int insert(String i, String p, String n,String em) {
 		Connection conn=getConnection();
 		PreparedStatement pstmt=null;
@@ -51,7 +58,7 @@ public class MemberDAO {
 			pstmt.setString(3, em);
 			pstmt.setString(4, p);
 			result = pstmt.executeUpdate();
-			
+			hm.put(i, new MemberDTO(i, n, em, p));
 		}catch(SQLException e) {
 			System.out.println(e);
 		}finally {
@@ -63,12 +70,21 @@ public class MemberDAO {
 	{
 		if(pstmt!=null) try { pstmt.close();} catch(SQLException e) {}
 		if(conn!=null) try { pstmt.close();} catch(SQLException e) {}
-	}
+	} 
 
-	public getAll()
+	public void getAll()
 	{
-		//자료구조 list map set => ArraryList : db연결후에 ArraryList에 담아 리턴
-		Connection conn=getConnection();
-
+		while(true) {
+			System.out.println("ID\t 이름\t 이메일\t");
+			Iterator<String> ita=hm.keySet().iterator();
+			while(ita.hasNext()) {
+				String id=ita.next();
+				MemberDTO value=hm.get(id);
+				System.out.println(id+"\t"+value);
+			}
+			
+		}
+	
+		
 	}
 }
