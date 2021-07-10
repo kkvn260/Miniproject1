@@ -12,7 +12,7 @@ import java.util.Scanner;
 public class MemberDAO {
 
 	Scanner sc=new Scanner(System.in);
-	private Connection getConnection(){ //db 기능 메서드
+	private Connection getConnection(){ 
 		String className = "oracle.jdbc.OracleDriver";
 		String url = "jdbc:oracle:thin:@localhost:1521:XE";
 		String user = "hr";
@@ -29,11 +29,6 @@ public class MemberDAO {
 		return conn;
 	}
 
-	//insert 기능 메서드 o
-	//update 기능 메서드
-	//delete 기능 메서드
-	//select 기능 메서드 
-	//close 기능 메서드 o
 	public int check(String i){
 		Connection conn=getConnection();
 		PreparedStatement pstmt=null;
@@ -141,12 +136,21 @@ public class MemberDAO {
 			sb.append("  ,email  ");
 			sb.append("  ,cdate  ");
 			sb.append("  from account  ");
-			sb.append("  where = ?  ");
+			sb.append("  where id= ?  ");
 
 			try {
 				pstmt=conn.prepareStatement(sb.toString());
 				pstmt.setString(1, id);
-				pstmt.executeQuery();
+				rs=pstmt.executeQuery();
+				System.out.println("ID\t 이름\t 이메일\t 가입일자\t");
+				while(rs.next()) {
+					System.out.printf("%s\t %s\t %s\t %s\n"
+							,rs.getString("id")
+							,rs.getString("name") 
+							,rs.getString("email")
+							,rs.getString("cdate")
+							);
+				}
 
 			}catch(SQLException e) {
 				System.out.println(e);
@@ -159,25 +163,6 @@ public class MemberDAO {
 			System.out.println("입력한 ID가 없습니다.");
 	}
 
-
-	/*
-	 * public void cseq() { Connection conn=getConnection(); PreparedStatement
-	 * pstmt=null; StringBuilder sql4=new StringBuilder();
-	 * sql4.append("  create sequence proseq  "); try {
-	 * pstmt=conn.prepareStatement(sql4.toString()); pstmt.executeUpdate();
-	 * }catch(SQLException e) { System.out.println(e); }finally { close(pstmt,conn);
-	 * } }
-	 * 
-	 * public void dseq() { Connection conn=getConnection(); PreparedStatement
-	 * pstmt=null; StringBuilder sql3=new StringBuilder();
-	 * sql3.append("  drop sequence proseq  ");
-	 * 
-	 * try { pstmt=conn.prepareStatement(sql3.toString()); pstmt.executeUpdate();
-	 * }catch(SQLException e) { System.out.println(e); }finally { close(pstmt,conn);
-	 * }
-	 * 
-	 * }
-	 */
 	public void modi() {
 		Connection conn=getConnection();
 		PreparedStatement pstmt=null;
