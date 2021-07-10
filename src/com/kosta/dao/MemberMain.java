@@ -8,7 +8,7 @@ public class MemberMain {
 		// TODO Auto-generated method stub
 		Scanner sc=new Scanner(System.in);
 		MemberDAO dao=new MemberDAO();
-//		dao.start();
+		dao.start();
 		
 		while (true) {
 			System.out.println("===메뉴===");
@@ -25,8 +25,8 @@ public class MemberMain {
 				while(true) {
 				System.out.println("ID를 입력해주세요.");
 				String id=sc.nextLine();
-				MemberDTO ck=dao.check(id);
-				if(ck==null) {
+				int ck=dao.check(id);
+				if(ck==0) {
 				System.out.println("비밀번호를 입력해주세요.");
 				String pwd=sc.nextLine();
 				System.out.println("이름를 입력해주세요.");
