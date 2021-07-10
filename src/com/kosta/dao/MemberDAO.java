@@ -38,18 +38,26 @@ public class MemberDAO {
 		Connection conn=getConnection();
 		PreparedStatement pstmt=null;
 		StringBuffer sb=new StringBuffer();
-		sb.append(" insert into (id,no)" );
-		sb.append("  values(?,0)"  );
+		sb.append(" select id  " );
+		sb.append("  from account  "  );
+		sb.append("  where id=?  ");
+		ResultSet rs=null;
 		int result=0;
 		try {
 			pstmt=conn.prepareStatement(sb.toString());
 			pstmt.setString(1, i);
-			result=pstmt.executeUpdate();
+			rs=pstmt.executeQuery();
+			if(rs.next()) {
+				result=1;
+			}
+			else
+				result=0;
 		}catch(SQLException e) {
 			System.out.println(e);
 		}finally {
 			close(pstmt, conn);
-		}return result;
+		}
+		return result;
 
 	}
 	public int insert(String i, String p, String n,String em) {
@@ -69,7 +77,7 @@ public class MemberDAO {
 			pstmt.setString(3, em);
 			pstmt.setString(4, p);
 			result = pstmt.executeUpdate();
-			
+
 		}catch(SQLException e) {
 			System.out.println(e);
 		}finally {
@@ -97,58 +105,58 @@ public class MemberDAO {
 		sb.append("  ,cdate  ");
 		sb.append("  from account  ");
 		sb.append("  order by no  ");
-		
+
 		try {
 			pstmt=conn.prepareStatement(sb.toString());
 			rs=pstmt.executeQuery();
 			System.out.println("번호\t ID\t 이름\t 이메일\t 가입일자\t");
 			while(rs.next()) {
-			System.out.printf("%d\t %s\t %s\t %s\t %s\n", rs.getInt("no")
-												,rs.getString("id")
-												,rs.getString("name")
-												,rs.getString("email")
-												,rs.getString("cdate")
-												);
+				System.out.printf("%d\t %s\t %s\t %s\t %s\n", rs.getInt("no")
+						,rs.getString("id")
+						,rs.getString("name")
+						,rs.getString("email")
+						,rs.getString("cdate")
+						);
 			}
-			
+
 		}catch(SQLException e) {
 			System.out.println(e);
 		}finally {
 			close(pstmt, conn);
 		}
-		
+
 	}
 
 	public void search() {
-			System.out.println("ID를 입력해주세요.");
-			String id=sc.nextLine();
-			int result=check(id);
-			if(result==0) {
-				Connection conn=getConnection();
-				PreparedStatement pstmt=null;
-				ResultSet rs=null;
-				StringBuffer sb=new StringBuffer();
-				sb.append( " select id  "  );
-				sb.append( " ,name  "  );
-				sb.append("  ,email  ");
-				sb.append("  ,cdate  ");
-				sb.append("  from account  ");
-				sb.append("  where = ?  ");
-				
-				try {
-					pstmt=conn.prepareStatement(sb.toString());
-					pstmt.setString(1, id);
-					pstmt.executeQuery();
-					
-				}catch(SQLException e) {
-					System.out.println(e);
-				}finally {
-					close(pstmt, conn);
-				}
+		System.out.println("ID를 입력해주세요.");
+		String id=sc.nextLine();
+		int result=check(id);
+		if(result>=1) {
+			Connection conn=getConnection();
+			PreparedStatement pstmt=null;
+			ResultSet rs=null;
+			StringBuffer sb=new StringBuffer();
+			sb.append( " select id  "  );
+			sb.append( " ,name  "  );
+			sb.append("  ,email  ");
+			sb.append("  ,cdate  ");
+			sb.append("  from account  ");
+			sb.append("  where = ?  ");
 
+			try {
+				pstmt=conn.prepareStatement(sb.toString());
+				pstmt.setString(1, id);
+				pstmt.executeQuery();
+
+			}catch(SQLException e) {
+				System.out.println(e);
+			}finally {
+				close(pstmt, conn);
 			}
-			else
-				System.out.println("입력한 ID가 없습니다.");
+
+		}
+		else
+			System.out.println("입력한 ID가 없습니다.");
 	}
 
 
@@ -176,8 +184,8 @@ public class MemberDAO {
 		StringBuffer sb=new StringBuffer();
 		System.out.println("수정할 ID를 입력해주세요.");
 		String id=sc.nextLine();
-		MemberDTO ck=check(id);
-		if(ck!=null) {
+		int ck=check(id);
+		if(ck>=1) {
 			System.out.println("수정할 비밀번호를 입력해주세요.");
 			String pwd=sc.nextLine();
 			sb.append("  update account  ");
@@ -210,8 +218,8 @@ public class MemberDAO {
 		StringBuffer sb=new StringBuffer();
 		System.out.println("삭제할 ID를 입력해주세요.");
 		String id=sc.nextLine();
-		MemberDTO ck=check(id);
-		if(ck!=null) {
+		int ck=check(id);
+		if(ck>=1) {
 			System.out.println("정말 삭제 하시겠습니까? y/n");
 			String yn=sc.nextLine();
 			if(yn.contentEquals("y")) {
@@ -237,10 +245,10 @@ public class MemberDAO {
 			System.out.println("입력한 ID가 없습니다.");
 	}
 
-		public void start() {
-			Connection conn=getConnection();
-			
+	public void start() {
+		Connection conn=getConnection();
 
-		}
+
+	}
 }
 
