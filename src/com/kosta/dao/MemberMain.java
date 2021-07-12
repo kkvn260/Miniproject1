@@ -8,7 +8,9 @@ public class MemberMain {
 		// TODO Auto-generated method stub
 		Scanner sc=new Scanner(System.in);
 		MemberDAO dao=new MemberDAO();
-		dao.start();
+		MemberDTO dto=new MemberDTO();
+		MemberCase ins=new MemberCase();
+
 
 		while (true) {
 			System.out.println("===메뉴===");
@@ -22,41 +24,16 @@ public class MemberMain {
 
 			switch(su) {
 			case "1":
-				while(true) {
-					System.out.println("ID를 입력해주세요.");
-					String id=sc.nextLine();
-					int ck=dao.check(id);
-					if(ck==0) {
-						System.out.println("비밀번호를 입력해주세요.");
-						String pwd=sc.nextLine();
-						System.out.println("이름를 입력해주세요.");
-						String name=sc.nextLine();
-						System.out.println("이메일를 입력해주세요.");
-						String email=sc.nextLine();
-
-						int result = dao.insert(id,pwd,name,email);
-						if(result >=1)
-							System.out.println("추가완료");
-						else
-							System.out.println("추가실패");  
-					}
-					else
-						System.out.println("이미 존재하는 ID입니다.");
-
-					System.out.println("계속 입력 하시겠습니까? y/n");
-					String yn=sc.nextLine();
-					if(yn.contentEquals("n"))
-						break; 
-				}
+				ins.case1();
 				break; 
 			case "2":
-				dao.modi();
+				ins.case2();
 				break;
 			case "3":
-				dao.delete();
+				ins.case3();
 				break;
 			case "4":
-				dao.search();
+				ins.case4();
 				break;
 			case "5": 
 				dao.getAll();

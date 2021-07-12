@@ -1,5 +1,6 @@
 package com.kosta.dao;
 
+import java.lang.reflect.Member;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -10,6 +11,7 @@ import java.util.Iterator;
 import java.util.Scanner;
 
 public class MemberDAO {
+
 
 	Scanner sc=new Scanner(System.in);
 	private Connection getConnection(){ 
@@ -55,7 +57,7 @@ public class MemberDAO {
 		return result;
 
 	}
-	public int insert(String i, String p, String n,String em) {
+	public int insert(MemberDTO em) {
 		Connection conn=getConnection();
 		PreparedStatement pstmt=null;
 
@@ -67,10 +69,10 @@ public class MemberDAO {
 		int result=0;
 		try {
 			pstmt=conn.prepareStatement(sql.toString());
-			pstmt.setString(1, i);
-			pstmt.setString(2, n);
-			pstmt.setString(3, em);
-			pstmt.setString(4, p);
+			pstmt.setString(1, em.getId());
+			pstmt.setString(2, em.getName());
+			pstmt.setString(3, em.getEmail());
+			pstmt.setString(4, em.getPwd());
 			result = pstmt.executeUpdate();
 
 		}catch(SQLException e) {
@@ -122,118 +124,86 @@ public class MemberDAO {
 
 	}
 
-	public void search() {
-		System.out.println("ID를 입력해주세요.");
-		String id=sc.nextLine();
-		int result=check(id);
-		if(result>=1) {
-			Connection conn=getConnection();
-			PreparedStatement pstmt=null;
-			ResultSet rs=null;
-			StringBuffer sb=new StringBuffer();
-			sb.append( " select id  "  );
-			sb.append( " ,name  "  );
-			sb.append("  ,email  ");
-			sb.append("  ,cdate  ");
-			sb.append("  from account  ");
-			sb.append("  where id= ?  ");
+	public void search(String id) {
 
-			try {
-				pstmt=conn.prepareStatement(sb.toString());
-				pstmt.setString(1, id);
-				rs=pstmt.executeQuery();
-				System.out.println("ID\t 이름\t 이메일\t 가입일자\t");
-				while(rs.next()) {
-					System.out.printf("%s\t %s\t %s\t %s\n"
-							,rs.getString("id")
-							,rs.getString("name") 
-							,rs.getString("email")
-							,rs.getString("cdate")
-							);
-				}
+		Connection conn=getConnection();
+		PreparedStatement pstmt=null;
+		ResultSet rs=null;
+		StringBuffer sb=new StringBuffer();
+		sb.append( " select id  "  );
+		sb.append( " ,name  "  );
+		sb.append("  ,email  ");
+		sb.append("  ,cdate  ");
+		sb.append("  from account  ");
+		sb.append("  where id= ?  ");
 
-			}catch(SQLException e) {
-				System.out.println(e);
-			}finally {
-				close(pstmt, conn);
+		try {
+			pstmt=conn.prepareStatement(sb.toString());
+			pstmt.setString(1, id);
+			rs=pstmt.executeQuery();
+			System.out.println("ID\t 이름\t 이메일\t 가입일자\t");
+			while(rs.next()) {
+				System.out.printf("%s\t %s\t %s\t %s\n"
+						,rs.getString("id")
+						,rs.getString("name")
+						,rs.getString("email")
+						,rs.getString("cdate")
+						);
 			}
 
+		}catch(SQLException e) {
+			System.out.println(e);
+		}finally {
+			close(pstmt, conn);
 		}
-		else
-			System.out.println("입력한 ID가 없습니다.");
 	}
 
-	public void modi() {
+
+	public int modi(MemberDTO em) {
 		Connection conn=getConnection();
 		PreparedStatement pstmt=null;
 		StringBuffer sb=new StringBuffer();
-		System.out.println("수정할 ID를 입력해주세요.");
-		String id=sc.nextLine();
-		int ck=check(id);
-		if(ck>=1) {
-			System.out.println("수정할 비밀번호를 입력해주세요.");
-			String pwd=sc.nextLine();
-			sb.append("  update account  ");
-			sb.append("  set pwd =? "   );
-			sb.append("  where id=? "  );
-			int result=0;
-			try {
-				pstmt=conn.prepareStatement(sb.toString());
-				pstmt.setString(1, pwd);
-				pstmt.setString(2, id);
-				result=pstmt.executeUpdate();
+
+		sb.append("  update account  ");
+		sb.append("  set pwd =? "   );
+		sb.append("  set email =? "   );
+		sb.append("  where id=? "  );
+		int result=0;
+		try {
+			pstmt=conn.prepareStatement(sb.toString());
+			pstmt.setString(1, em.getPwd());
+			pstmt.setString(2, em.getEmail());
+			pstmt.setString(3, em.getId());
+			result=pstmt.executeUpdate();
 
 
-			}catch(SQLException e) {
-				System.out.println(e);
-			}finally {
-				close(pstmt,conn);
-			}
-			if(result >=1)
-				System.out.println("수정완료");
+		}catch(SQLException e) {
+			System.out.println(e);
+		}finally {
+			close(pstmt,conn);
 		}
-		else
-			System.out.println("입력한 ID가 없습니다.");
-
+		return result;
 	}
 
-	public void delete() {
+	public int delete(String id) {
 		Connection conn=getConnection();
 		PreparedStatement pstmt=null;
 		StringBuffer sb=new StringBuffer();
-		System.out.println("삭제할 ID를 입력해주세요.");
-		String id=sc.nextLine();
-		int ck=check(id);
-		if(ck>=1) {
-			System.out.println("정말 삭제 하시겠습니까? y/n");
-			String yn=sc.nextLine();
-			if(yn.contentEquals("y")) {
-				sb.append("  delete from account  ");
-				sb.append("  where id=? "  );
-				int result=0;
-				try {
-					pstmt=conn.prepareStatement(sb.toString());
-					pstmt.setString(1, id);
-					result=pstmt.executeUpdate();
-				}catch(SQLException e) {
-					System.out.println(e);
-				}finally {
-					close(pstmt,conn);
-				}
-				if(result >=1)
-					System.out.println("삭제 완료");
-				else
-					System.out.println("삭제 실패");
-			}
-		}
-		else
-			System.out.println("입력한 ID가 없습니다.");
-	}
 
-	public void start() {
-		Connection conn=getConnection();
-
-
+		sb.append("  delete from account  ");
+		sb.append("  where id=? "  );
+		int result=0;
+		try {
+			pstmt=conn.prepareStatement(sb.toString());
+			pstmt.setString(1, id);
+			result=pstmt.executeUpdate();
+		}catch(SQLException e) {
+			System.out.println(e);
+		}finally {
+			close(pstmt,conn);
+		}return result;
 	}
 }
+
+
 
